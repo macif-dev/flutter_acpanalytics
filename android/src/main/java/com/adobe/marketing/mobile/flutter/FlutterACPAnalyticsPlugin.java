@@ -10,7 +10,7 @@ governing permissions and limitations under the License.
 */
 package com.adobe.marketing.mobile.flutter;
 
-
+import androidx.annotation.NonNull;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -22,13 +22,28 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
 
 /** FlutterACPAnalyticsPlugin */
-public class FlutterACPAnalyticsPlugin implements MethodCallHandler {
+public class FlutterACPAnalyticsPlugin implements MethodCallHandler, FlutterPlugin {
+
+  private static final String CHANNEL_NAME = "flutter_acpanalytics";
+  private MethodChannel channel;
 
   public static void registerWith(Registrar registrar) {
-    final MethodChannel channel = new MethodChannel(registrar.messenger(), "flutter_acpanalytics");
+    final MethodChannel channel = new MethodChannel(registrar.messenger(), CHANNEL_NAME);
     channel.setMethodCallHandler(new FlutterACPAnalyticsPlugin());
+  }
+
+  @Override
+  public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
+    channel = new MethodChannel(binding.getBinaryMessenger(), CHANNEL_NAME);
+    channel.setMethodCallHandler(this);
+  }
+
+  @Override
+  public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+    channel.setMethodCallHandler(null);
   }
 
   @Override
