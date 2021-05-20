@@ -54,6 +54,6 @@ class FlutterACPAnalytics {
 
   /// Sets a custom Analytics visitor identifier.
   static Future<void> setVisitorIdentifier(String vid) async {
-    await _channel.invokeMethod<void>('setVisitorIdentifier', vid ?? "");
+    await _channel.invokeMethod<void>('setVisitorIdentifier', vid);
   }
 }

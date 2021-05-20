@@ -75,17 +75,17 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> getTrackingIdentifier() async {
-    String trackingId;
     try {
-      trackingId = await FlutterACPAnalytics.trackingIdentifier;
+      String trackingId = await FlutterACPAnalytics.trackingIdentifier;
+
+      if (!mounted) return;
+      setState(() {
+        _trackingId = trackingId;
+      });
     } on PlatformException {
       log("Failed to get the tracking identifier");
     }
 
-    if (!mounted) return;
-    setState(() {
-      _trackingId = trackingId;
-    });
   }
 
   Future<void> getVisitorIdentifier() async {
@@ -115,29 +115,29 @@ class _MyAppState extends State<MyApp> {
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  RaisedButton(
+                  TextButton(
                     child: Text("ACPCore.trackState(...)"),
                     onPressed: () => FlutterACPCore.trackState("myState",
                         data: {"key1": "value1"}),
                   ),
-                  RaisedButton(
+                  TextButton(
                     child: Text("ACPCore.trackAction(...)"),
                     onPressed: () => FlutterACPCore.trackAction("myAction",
                         data: {"key1": "value1"}),
                   ),
                 ]),
-            RaisedButton(
+            TextButton(
               child: Text("ACPAnalytics.sendQueuedHits()"),
               onPressed: () => FlutterACPAnalytics.sendQueuedHits(),
             ),
-            RaisedButton(
+            TextButton(
               child: Text("ACPAnalytics.clearQueue()"),
               onPressed: () => FlutterACPAnalytics.clearQueue(),
             ),
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  RaisedButton(
+                  TextButton(
                     child: Text("ACPAnalytics.getQueueSize()"),
                     onPressed: () => getQueueSize(),
                   ),
@@ -146,7 +146,7 @@ class _MyAppState extends State<MyApp> {
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  RaisedButton(
+                  TextButton(
                     child: Text("ACPAnalytics.getTrackingIdentifier()"),
                     onPressed: () => getTrackingIdentifier(),
                   ),
@@ -155,13 +155,13 @@ class _MyAppState extends State<MyApp> {
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  RaisedButton(
+                  TextButton(
                     child: Text("ACPAnalytics.getVisitorIdentifier()"),
                     onPressed: () => getVisitorIdentifier(),
                   ),
                   Text('Visitor Id = $_visitorId\n'),
                 ]),
-            RaisedButton(
+            TextButton(
               child: Text("ACPAnalytics.setVisitorIdentifier(vid)"),
               onPressed: () => FlutterACPAnalytics.setVisitorIdentifier("vid"),
             ),
